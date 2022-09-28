@@ -5,9 +5,8 @@ import update from 'immutability-helper';
 
 const { FormField } = LegacyForms;
 
-interface Options {
-  endpoint?: string;
-}
+import { defaultOptions, Options } from './types';
+import { defaults } from 'lodash';
 
 interface Props extends DataSourcePluginOptionsEditorProps<Options> {}
 
@@ -24,6 +23,10 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
   render = () => {
 
+    let options = defaults(this.props.options.jsonData, defaultOptions);
+
+    console.log("options", options);
+
     return (
       <div className="gf-form-group">
         <div className="gf-form">
@@ -32,7 +35,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelWidth={6}
             inputWidth={20}
             onChange={this.onEndpointChange}
-            value={this.props.options.jsonData.endpoint || ''}
+            value={options.endpoint}
             placeholder="https://engine.anomalizer.app"
           />
         </div>
