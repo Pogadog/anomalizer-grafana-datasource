@@ -1,16 +1,18 @@
-import defaults from 'lodash/defaults';
+
 
 import {
+  DataFrame,
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
+  Field,
   MutableDataFrame
 } from '@grafana/data';
 
 import { getBackendSrv } from "@grafana/runtime"
 
-import { Query, Options, defaultQuery, MetricImage } from './types';
+import { Query, Options, MetricImage } from './types';
 
 export class DataSource extends DataSourceApi<Query, Options> {
 
@@ -111,7 +113,7 @@ export class DataSource extends DataSourceApi<Query, Options> {
       name: 'anomalizer',
       refId: target.refId,
       fields: [
-        { name: 'Images', values: [images] }
+        { name: 'Images', values: [images], config: { custom: { instanceSettings: this.instanceSettings } } }
       ],
     });
 
