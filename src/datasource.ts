@@ -84,8 +84,6 @@ export class DataSource extends DataSourceApi<Query, Options> {
                 }
                 }
 
-                
-
                 if (target.secondaryPanelFilter) {
                 if (target.secondaryPanelFilterInvert) {
                     if (searchString.match(`${target.secondaryPanelFilter}`)) {
