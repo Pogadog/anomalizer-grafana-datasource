@@ -10,7 +10,10 @@ import {
   MutableDataFrame
 } from '@grafana/data';
 
+// TS validator not finding the runtime lib
+//@ts-ignore
 import { getBackendSrv } from "@grafana/runtime"
+
 
 import { Query, Options, MetricImage } from './types';
 
@@ -54,67 +57,108 @@ export class DataSource extends DataSourceApi<Query, Options> {
 
     let data = options.targets.map(target => {
 
-      if (target.primaryPanelFilter || target.secondaryPanelFilter) {
-        for (let chartId in images) {
+      let targetImages = {...images}
 
-            let chart: MetricImage = images[chartId];
+      let sortBy = target.sortBy || 'rstd';
+
+      if (target.primaryPanelFilter || target.secondaryPanelFilter) {
+        for (let chartId in targetImages) {
+
+            let chart: MetricImage = targetImages[chartId];
 
             let searchString = chart.metric + ',' + JSON.stringify(chart.tags) + ',' + JSON.stringify({status: chart.status}) + ',' + chart.type + ',' + JSON.stringify({ features: chart.features }) + ',' + JSON.stringify({ cardinality: chart.cardinality }) + ',' + JSON.stringify({ plot: chart.plot });  
             
             try {
 
                 if (target.primaryPanelFilter) {
-                  if (target.primaryPanelFilterInvert) {
+                if (target.primaryPanelFilterInvert) {
                     if (searchString.match(`${target.primaryPanelFilter}`)) {
-                      delete images[chartId];
-                      continue;
+                    delete targetImages[chartId];
+                    continue;
                     }
-                  } else {
+                } else {
                     if (!searchString.match(`${target.primaryPanelFilter}`)) {
-                      delete images[chartId];
-                      continue;
+                    delete targetImages[chartId];
+                    continue;
                     }
-                  }
+                }
                 }
 
                 
 
                 if (target.secondaryPanelFilter) {
-                  if (target.secondaryPanelFilterInvert) {
+                if (target.secondaryPanelFilterInvert) {
                     if (searchString.match(`${target.secondaryPanelFilter}`)) {
-                        delete images[chartId];
+                        delete targetImages[chartId];
                         continue;
-                      }
-                  } else {
-                      if (!searchString.match(`${target.secondaryPanelFilter}`)) {
-                        delete images[chartId];
+                    }
+                } else {
+                    if (!searchString.match(`${target.secondaryPanelFilter}`)) {
+                        delete targetImages[chartId];
                         continue;
-                      }
-                  }
+                    }
                 }
-
-                
-
-                
+                }
 
             } catch (e) {
 
-                delete images[chartId];
+                delete targetImages[chartId];
                 continue;
             }
 
         }
+      }
+
+    let sortedMetrics: {[key: string]: MetricImage[]} = {
+        critical: [],
+        warning: [],
+        normal: []
     }
 
-    console.log("after filter", images);  
+    for (let metricId in targetImages) {
 
+        let chart = targetImages[metricId];
+
+        let weight = (
+            target.sortBy === 'alpha' ? -chart.metric.charCodeAt(0): 
+            target.sortBy === 'spike' ? chart.stats.spike: 
+            target.sortBy === 'rstd' ? chart.stats.rstd : 
+            target.sortBy === 'max' ? chart.stats.max : 
+            target.sortBy === 'rmax' ? chart.stats.rmax : 
+            target.sortBy === 'mean' ? chart.stats.mean : 
+            chart.stats.std) + Math.abs((chart.features.increasing?.increase ?? 0) + (chart.features.decreasing?.decrease ?? 0)) + (Math.abs(chart.features.hockeystick?.increasing || chart.features.hockeystick?.increasing || 0)); 
+
+        chart.weight = weight;
+
+        sortedMetrics[images[metricId].status].push(chart);
+    }
+
+    for (let status in sortedMetrics) {
+
+        // timeseries or scatter
+        sortedMetrics[status] = sortedMetrics[status].filter(metric => {
+            return metric.plot === target.metricType;
+        })
+
+        // sort based on weight
+        sortedMetrics[status] = sortedMetrics[status].sort((a, b) => {
+            if ( a.weight < b.weight ){
+                return 1;
+            }
+            if ( a.weight > b.weight ){
+                return -1;
+            }
+
+            return 0;
+        })
+    }
 
     return new MutableDataFrame({
-      name: 'anomalizer',
-      refId: target.refId,
-      fields: [
-        { name: 'Images', values: [images], config: { custom: { instanceSettings: this.instanceSettings } } }
-      ],
+        name: 'anomalizer',
+        refId: target.refId,
+        fields: [
+            { name: 'Images', values: [[...sortedMetrics.critical, ...sortedMetrics.warning, ...sortedMetrics.normal]], config: { custom: { instanceSettings: this.instanceSettings } } }
+        ],
     });
 
     });

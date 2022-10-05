@@ -1,15 +1,27 @@
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
+export type hrConversionFlags = 'toHumanReadable' | 'fromHumanReadable';
+export interface SortByParameters {
+    nonHumanReadable: 'alpha' | 'max' | 'rmax' | 'mean' | 'rstd' | 'spike'
+    humanReadable : 'Alpha' | 'Max' | '-Max' | 'Mean' | 'RSTD' | 'Spike'
+}
+
+export type MetricType = 'timeseries' | 'scatter';
+
 export interface Query extends DataQuery {
   primaryPanelFilter?: string;
   primaryPanelFilterInvert: boolean;
   secondaryPanelFilter?: string;
-  secondaryPanelFilterInvert: boolean
+  secondaryPanelFilterInvert: boolean;
+  sortBy: SortByParameters["nonHumanReadable"];
+  metricType: MetricType
 }
 
 export const defaultQuery: Partial<Query> = {
   primaryPanelFilterInvert: false,
-  secondaryPanelFilterInvert: false
+  secondaryPanelFilterInvert: false,
+  sortBy: 'rstd',
+  metricType: 'timeseries',
 };
 
 export const defaultOptions: Partial<Options> = {
