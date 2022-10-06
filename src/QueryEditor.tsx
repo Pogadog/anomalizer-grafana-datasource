@@ -27,9 +27,6 @@ export class QueryEditor extends PureComponent<Props> {
     let sortByOptions = ['alpha', 'max', 'rmax', 'mean', 'rstd', 'spike'];
 
     let metricTypeOptions = ['timeseries', 'scatter'];
-    let metricTypeHR = transformMetricType('toHumanReadable', query.metricType)
-
-    let sortByHR = transformSortBy('toHumanReadable', query.sortBy);
 
     return (
       <div className="gf-form" style={{ display: 'flex', flexDirection: 'column' }} >

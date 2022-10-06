@@ -59,8 +59,6 @@ export class DataSource extends DataSourceApi<Query, Options> {
 
       let targetImages = {...images}
 
-      let sortBy = target.sortBy || 'rstd';
-
       if (target.primaryPanelFilter || target.secondaryPanelFilter) {
         for (let chartId in targetImages) {
 
@@ -73,15 +71,15 @@ export class DataSource extends DataSourceApi<Query, Options> {
                 if (target.primaryPanelFilter) {
                 if (target.primaryPanelFilterInvert) {
                     if (searchString.match(`${target.primaryPanelFilter}`)) {
-                    delete targetImages[chartId];
-                    continue;
+                        delete targetImages[chartId];
+                        continue;
                     }
                 } else {
                     if (!searchString.match(`${target.primaryPanelFilter}`)) {
-                    delete targetImages[chartId];
-                    continue;
+                        delete targetImages[chartId];
+                        continue;
+                        }
                     }
-                }
                 }
 
                 if (target.secondaryPanelFilter) {
