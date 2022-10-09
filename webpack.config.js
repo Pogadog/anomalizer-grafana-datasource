@@ -9,7 +9,7 @@ module.exports = (config, options) => {
         apply: (compiler) => {
             compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
                 let buildPath = fs.readFileSync("./grafanaPluginDirectory.txt", 'utf-8');
-                exec(`mkdir -p ${buildPath}/anomalizer-grafana-datasource && cp -r dist/ ${buildPath}/anomalizer-grafana-datasource`, (err, stdout, stderr) => {
+                exec(`mkdir -p ${buildPath}/anomalizer-grafana-datasource && cp -r dist/ ${buildPath}/pogadog-anomalizer-datasource`, (err, stdout, stderr) => {
                     process.stdout.write(`  Plugin successfully copied to ${buildPath}\n`);
                 });
             });
