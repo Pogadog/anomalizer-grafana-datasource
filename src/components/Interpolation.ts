@@ -1,6 +1,6 @@
 import { SortByParameters, hrConversionFlags } from "types";
 
-export const transformMetricType = (operation: hrConversionFlags, v: string | undefined) : string => {
+export const transformMetricType = (operation: hrConversionFlags, v: string | undefined): string => {
 
     if (!v) {
         return '';

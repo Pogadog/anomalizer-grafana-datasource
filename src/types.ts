@@ -3,7 +3,7 @@ import { DataQuery, DataSourceJsonData } from '@grafana/data';
 export type hrConversionFlags = 'toHumanReadable' | 'fromHumanReadable';
 export interface SortByParameters {
     nonHumanReadable: 'alpha' | 'max' | 'rmax' | 'mean' | 'rstd' | 'spike'
-    humanReadable : 'Alpha' | 'Max' | '-Max' | 'Mean' | 'RSTD' | 'Spike'
+    humanReadable: 'Alpha' | 'Max' | '-Max' | 'Mean' | 'RSTD' | 'Spike'
 }
 
 export type MetricType = 'timeseries' | 'scatter';
