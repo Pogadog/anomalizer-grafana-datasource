@@ -95,7 +95,7 @@ export class QueryEditor extends PureComponent<Props> {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }} >
-          <Label className='gf-form-label' style={{ paddingLeft: 5, paddingRight: 5, marginRight: 5, color: '#c7d0d9' }} >Sort metrics by</Label>
+          <Label className='gf-form-label' style={{ paddingLeft: 5, paddingRight: 5, marginRight: 5, color: '#c7d0d9' }} >Sort Metrics By</Label>
 
           <div style={{ width: 5 }} />
           
@@ -117,7 +117,7 @@ export class QueryEditor extends PureComponent<Props> {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }} >
-          <Label className='gf-form-label' style={{ paddingLeft: 5, paddingRight: 5, marginRight: 5, color: '#c7d0d9' }} >Metric Types</Label>
+          <Label className='gf-form-label' style={{ paddingLeft: 5, paddingRight: 5, marginRight: 5, color: '#c7d0d9' }} >Metric Type</Label>
 
           <div style={{ width: 5 }} />
           
