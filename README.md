@@ -1,42 +1,58 @@
-# Grafana Data Source Plugin Template
+# Anomalizer Grafana Datasource by Pogadog
 
-[![Build](https://github.com/grafana/grafana-starter-datasource/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-datasource/actions?query=workflow%3A%22CI%22)
+![Licesnse](https://img.shields.io/github/license/pogadog/anomalizer-grafana-datasource) [![Build](https://github.com/pogadog/anomalizer-grafana-datasource/workflows/CI/badge.svg)](https://github.com/pogadog/anomalizer-grafana-datasource/actions?query=workflow%3A%22CI%22) [![Release](https://github.com/pogadog/anomalizer-grafana-datasource/workflows/Release/badge.svg)](https://github.com/pogadog/anomalizer-grafana-datasource/actions?query=workflow%3A%22Release%22) ![GitHub last commit](https://img.shields.io/github/last-commit/pogadog/anomalizer-grafana-datasource) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/pogadog/anomalizer-grafana-datasource)
 
-This template is a starting point for building Grafana Data Source Plugins
+This is the Grafana plugin for the Anomalizer, which provides Prometheus anomaly visualization. Written in React Typescript with the Grafana plugin infastructure, it's based upon the [original React-Native UI](https://github.com/pogadog/anomalizer-ui).
 
-## What is Grafana Data Source Plugin?
+> With its grid-based design and similar metrics feature, the Anomalizer UI aims to create the perfect balance of computer intelligence and the human eye to help find anomalies within your system.
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There’s a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. Grafana Data Source Plugins enables integrating such solutions with Grafana.
+> With split-pane views, actionable features, and quick filter mechanisms, the Anomalizer UI helps you find metrics that are important, faster.
 
-## Getting started
+> The Anomalizer UI follows the Airbus [*dark cockpit*](https://www.icao.int/ESAF/Documents/meetings/2017/AFI%20FOSAS%202017/Day%201%20Docs/Day_1_2_Airbuspihlo.pdf) aircraft design philosophy with its presentation of metrics by visually highlighting metrics you need to know about on its main page, allowing you to identify anomalies in your system within a fraction of a second.
 
-1. Install dependencies
+This plugin is in active development. It's constantly being improved upon, gradually implementing features from the original UI.
 
-   ```bash
-   yarn install
-   ```
+# Co-dependents
 
-2. Build plugin in development mode or run in watch mode
+This project is not standalone; it requires the Anomalizer server, which can be boostrapped through its Github project [here](https://github.com/pogadog/anomalizer), or accessed in a production environment [here](https://anomalizer.app) on the web.
 
-   ```bash
-   yarn dev
-   ```
+This plugin connects to the instance via url eg. `https://engine.anomalizer.app`, `http://localhost:8056`.
 
-   or
+# Getting Started (Alpha Release)
 
-   ```bash
-   yarn watch
-   ```
+>The following instructions are for the Alpha release of the Anomalizer Grafana Plugin. The steps for getting started will be *much* easier when it's published to the Grafana Marketplace soon.
 
-3. Build plugin in production mode
+### Requirements
+- Docker
 
-   ```bash
-   yarn build
-   ```
+### Start Grafana
+- Download the latest release of the Anomalizer Grafana Datasource. You should now have a zip file called `pogadog-anomalizer-datasource-0.0.x.zip` in your `Downloads` folder from here: https://github.com/Pogadog/anomalizer-grafana-datasource/releases
+- Extract the zip folder. There should now be a folder called `pogadog-anomalizer-panel` in your `Downloads` folder
+- *[MacOS and Linux]* Open up a terminal, and `cd` into your `Downloads` folder. Run the following command inside your `Downloads` folder: 
+    - `docker run -d -p 3000:3000 -v "$(pwd)"/pogadog-anomalizer-panel:/var/lib/grafana/plugins --name=grafana-anomalizer grafana/grafana:7.0.0`
 
-## Learn more
+### Build the Panel
+- Open up your Grafana Dashboards on [http://localhost:3000/dashboard/new](http://localhost:3000/dashboard/new)
+- Login with username `admin` and password `admin`, and skip resetting your password
+- Click `Add new panel`
+- Under the `Visualization` dropdown in the right-hand column, click `Anomalizer`
+- Click `Apply` (or `Save` to persist your changes)
 
-- [Build a data source plugin tutorial](https://grafana.com/tutorials/build-a-data-source-plugin)
-- [Grafana documentation](https://grafana.com/docs/)
-- [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
-- [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
+### You should now have a working panel of the Anomalizer plugin!
+> The plugin automatically connects to `https://engine.anomalizer.app`, the on-demand Anomalizer demo backend in the cloud. It may take a moment for the metrics to show up. This is a shared instance, so cloud metric filters may be inconsistent.
+# Development
+
+### Libraries Needed
+- Node : >=16
+- Npm : latest (should come with Node)
+- Docker
+
+### Install the project
+- Clone
+- `cd anomalizer-grafana-plugin`
+- `npm install`
+- `npm start`
+
+### Start Docker
+- `npm run docker-init`
+- Follow the instructions from `Getting Started - Build the Panel` to initialize the panels
