@@ -1,12 +1,10 @@
 
 
 import {
-  DataFrame,
   DataQueryRequest,
   DataQueryResponse,
   DataSourceApi,
   DataSourceInstanceSettings,
-  Field,
   MutableDataFrame
 } from '@grafana/data';
 
