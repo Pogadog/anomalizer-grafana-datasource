@@ -10,7 +10,7 @@ import {
 
 // TS validator not finding the runtime lib
 //@ts-ignore
-import { getBackendSrv } from "@grafana/runtime"
+import { getBackendSrv, FetchResponse } from "@grafana/runtime"
 
 
 import { Query, Options, MetricImage } from './types';
@@ -22,6 +22,14 @@ export class DataSource extends DataSourceApi<Query, Options> {
   constructor(instanceSettings: DataSourceInstanceSettings<Options>) {
     super(instanceSettings);
     this.instanceSettings = instanceSettings;
+  }
+
+  setImageCache = (images: MetricImage) => {
+    
+  }
+
+  retrieveImageCache = () => {
+
   }
 
   request = async (url: string, method: 'GET' | 'POST', params?: {[key: string]: string}) => {
@@ -46,12 +54,23 @@ export class DataSource extends DataSourceApi<Query, Options> {
      
     } while (complete === false);
 
+    return null;
 
   }
 
   async query(options: DataQueryRequest<Query>): Promise<DataQueryResponse> {
 
     let images = (await this.request(this.instanceSettings.jsonData.endpoint + '/images',  "GET")).data;
+
+    let cache = {};
+
+    Object.keys(images).map(imageId => {
+        let image = {...images[imageId]};
+        delete image.img;
+        delete image.metric;
+        delete image.id;
+    })
+
 
     let data = options.targets.map(target => {
 
