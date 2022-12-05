@@ -60,9 +60,9 @@ export class DataSource extends DataSourceApi<Query, Options> {
 
   async query(options: DataQueryRequest<Query>): Promise<DataQueryResponse> {
 
-    let images = (await this.request(this.instanceSettings.jsonData.endpoint + '/images',  "GET")).data;
+    let images = (await this.request(this.instanceSettings.jsonData.endpoint + '/images',  "GET"))?.data;
 
-    let cache = {};
+    //let cache = {};
 
     Object.keys(images).map(imageId => {
         let image = {...images[imageId]};
@@ -183,7 +183,7 @@ export class DataSource extends DataSourceApi<Query, Options> {
 
     let r = await this.request(this.instanceSettings.jsonData.endpoint,  "GET");
 
-    if (r.ok) {
+    if (r?.ok) {
       return {
         status: 'success',
         message: 'Connection to remote OK',
