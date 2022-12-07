@@ -23,8 +23,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
     let options = defaults(this.props.options.jsonData, defaultOptions);
 
-    console.log("options", options);
-
     return (
     <div className="gf-form-group">
         <div className="gf-form" style={{ display: 'flex', flexDirection: 'column' }} >
