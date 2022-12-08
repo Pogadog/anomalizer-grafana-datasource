@@ -25,14 +25,19 @@ export const defaultQuery: Partial<Query> = {
 };
 
 export const defaultOptions: Partial<Options> = {
-  endpoint: "https://engine.anomalizer.app"
+  endpoint: "https://engine.anomalizer.app",
+  primaryServerFilter: '',
+  secondaryServerFilter: '',
+  invertPrimaryServerFilter: false,
+  invertSecondaryServerFilter: false
 }
 
 export interface Options extends DataSourceJsonData {
   endpoint: string;
-  primaryServerFilter?: string;
-  secondaryServerFilter?: string;
-
+  primaryServerFilter: string;
+  secondaryServerFilter: string;
+  invertPrimaryServerFilter: boolean;
+  invertSecondaryServerFilter: boolean;
 }
 
 export type DistributionTypes = "gaussian" | "left-tailed" | "right-tailed" | "bi-modal";

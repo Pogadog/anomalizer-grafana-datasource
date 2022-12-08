@@ -32,7 +32,7 @@ export class DataSource extends DataSourceApi<Query, Options> {
 
   }
 
-  request = async (url: string, method: 'GET' | 'POST', params?: {[key: string]: string}) => {
+  request = async (url: string, method: 'GET' | 'POST', params?: {[key: string]: any}) => {
 
     let complete = false;
 
@@ -44,6 +44,7 @@ export class DataSource extends DataSourceApi<Query, Options> {
         let r = await getBackendSrv().datasourceRequest({
           method,
           url,
+          ...params
         })
         complete = true;
         return r;
@@ -59,6 +60,20 @@ export class DataSource extends DataSourceApi<Query, Options> {
   }
 
   async query(options: DataQueryRequest<Query>): Promise<DataQueryResponse> {
+
+    await this.request(this.instanceSettings.jsonData.endpoint + '/filter', 'POST', { 
+        method: 'POST',
+        headers: {
+            'Accept-Type': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            query: this.instanceSettings.jsonData.primaryServerFilter,
+            query2: this.instanceSettings.jsonData.secondaryServerFilter,
+            invert: this.instanceSettings.jsonData.invertPrimaryServerFilter,
+            invert2: this.instanceSettings.jsonData.invertSecondaryServerFilter
+        })
+    });
 
     let images = (await this.request(this.instanceSettings.jsonData.endpoint + '/images',  "GET"))?.data;
 
